@@ -1,0 +1,137 @@
+{
+  "_comment": "Manually identified locations from no-GPS photos (vision AI + user input)",
+  "entries": [
+    {
+      "dates": ["2009-03-26"],
+      "location": "Melbourne",
+      "country": "Australia",
+      "country_code": "AU",
+      "continent": "Oceania",
+      "lat": -37.8136,
+      "lon": 144.9631,
+      "flag": "🇦🇺",
+      "note": "Luna Park St Kilda — AI identified"
+    },
+    {
+      "dates": ["2009-06-06"],
+      "location": "Lebanon",
+      "country": "Lebanon",
+      "country_code": "LB",
+      "continent": "Asia",
+      "lat": 33.8938,
+      "lon": 35.5018,
+      "flag": "🇱🇧",
+      "note": "Boat trip — AI identified as Lebanon"
+    },
+    {
+      "dates": ["2009-07-10"],
+      "location": "Venice",
+      "country": "Italy",
+      "country_code": "IT",
+      "continent": "Europe",
+      "lat": 45.4408,
+      "lon": 12.3155,
+      "flag": "🇮🇹",
+      "note": "Punta della Dogana — AI identified"
+    },
+    {
+      "dates": ["2009-07-12", "2009-07-13"],
+      "location": "Florence",
+      "country": "Italy",
+      "country_code": "IT",
+      "continent": "Europe",
+      "lat": 43.7696,
+      "lon": 11.2558,
+      "flag": "🇮🇹",
+      "note": "Piazza della Signoria — AI identified"
+    },
+    {
+      "dates": ["2009-07-19"],
+      "location": "Messina",
+      "country": "Italy",
+      "country_code": "IT",
+      "continent": "Europe",
+      "lat": 38.1938,
+      "lon": 15.5540,
+      "flag": "🇮🇹",
+      "note": "Cathedral clock tower — AI identified"
+    },
+    {
+      "dates": ["2009-07-23"],
+      "location": "Sicily",
+      "country": "Italy",
+      "country_code": "IT",
+      "continent": "Europe",
+      "lat": 37.5,
+      "lon": 14.0,
+      "flag": "🇮🇹",
+      "note": "Italian church — AI identified"
+    },
+    {
+      "dates": ["2009-07-27", "2009-07-28", "2009-07-29"],
+      "location": "Rome",
+      "country": "Italy",
+      "country_code": "IT",
+      "continent": "Europe",
+      "lat": 41.8902,
+      "lon": 12.4922,
+      "flag": "🇮🇹",
+      "note": "Colosseum — AI identified"
+    },
+    {
+      "dates": ["2009-07-30"],
+      "location": "Pisa",
+      "country": "Italy",
+      "country_code": "IT",
+      "continent": "Europe",
+      "lat": 43.7228,
+      "lon": 10.3966,
+      "flag": "🇮🇹",
+      "note": "Leaning Tower — AI identified"
+    },
+    {
+      "dates": ["2009-08-19", "2009-08-20"],
+      "location": "Paris",
+      "country": "France",
+      "country_code": "FR",
+      "continent": "Europe",
+      "lat": 48.8566,
+      "lon": 2.3522,
+      "flag": "🇫🇷",
+      "note": "Notre-Dame — AI identified"
+    },
+    {
+      "dates": ["2009-08-26"],
+      "location": "Giza",
+      "country": "Egypt",
+      "country_code": "EG",
+      "continent": "Africa",
+      "lat": 29.9792,
+      "lon": 31.1342,
+      "flag": "🇪🇬",
+      "note": "Pyramids — AI identified"
+    },
+    {
+      "dates": ["2009-09-05", "2009-09-06", "2009-09-07"],
+      "location": "Petra",
+      "country": "Jordan",
+      "country_code": "JO",
+      "continent": "Asia",
+      "lat": 30.3285,
+      "lon": 35.4444,
+      "flag": "🇯🇴",
+      "note": "Ad-Deir (The Monastery) — AI identified"
+    },
+    {
+      "dates": ["2009-10-07", "2009-10-08", "2009-10-09"],
+      "location": "Agra",
+      "country": "India",
+      "country_code": "IN",
+      "continent": "Asia",
+      "lat": 27.1751,
+      "lon": 78.0421,
+      "flag": "🇮🇳",
+      "note": "Taj Mahal — AI identified"
+    }
+  ]
+}

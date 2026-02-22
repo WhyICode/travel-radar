@@ -29,7 +29,7 @@ CONTINENT_MAP = {
     "US": "North America", "CA": "North America", "MX": "North America",
     "BR": "South America", "AR": "South America",
     "MA": "Africa", "EG": "Africa", "ZA": "Africa",
-    "GI": "Europe",
+    "GI": "Europe", "IN": "Asia",
 }
 
 FLAG_MAP = {
@@ -38,7 +38,7 @@ FLAG_MAP = {
     "JP": "🇯🇵", "HK": "🇭🇰", "AE": "🇦🇪", "TH": "🇹🇭", "SG": "🇸🇬",
     "US": "🇺🇸", "MA": "🇲🇦", "EG": "🇪🇬", "QA": "🇶🇦", "IR": "🇮🇷",
     "GI": "🇬🇮", "CH": "🇨🇭", "DE": "🇩🇪", "MC": "🇲🇨", "HR": "🇭🇷",
-    "LB": "🇱🇧", "JO": "🇯🇴", "TR": "🇹🇷",
+    "LB": "🇱🇧", "JO": "🇯🇴", "TR": "🇹🇷", "IN": "🇮🇳",
 }
 
 COUNTRY_NAME = {
@@ -48,6 +48,7 @@ COUNTRY_NAME = {
     "SG": "Singapore", "US": "USA", "MA": "Morocco", "EG": "Egypt", "QA": "Qatar",
     "IR": "Iran", "GI": "Gibraltar", "CH": "Switzerland", "DE": "Germany",
     "MC": "Monaco", "HR": "Croatia", "LB": "Lebanon", "JO": "Jordan", "TR": "Turkey",
+    "IN": "India",
 }
 
 # Sydney metro — merge these into "Sydney"
@@ -278,6 +279,59 @@ def main():
             inferred += 1
     
     print(f"Inferred {inferred:,} photos", file=sys.stderr)
+    
+    # ─── PHASE 2.5: Manual locations (vision-identified no-GPS photos) ───
+    manual_file = os.path.join(os.path.dirname(__file__), 'manual-locations.json')
+    if os.path.exists(manual_file):
+        print("Phase 2.5: Adding manually identified locations...", file=sys.stderr)
+        with open(manual_file) as f:
+            manual = json.load(f)
+        
+        for entry in manual.get('entries', []):
+            loc_name = entry['location']
+            cc = entry['country_code']
+            
+            # Count photos for these dates
+            date_clauses = " OR ".join(
+                f"date(datetime(ZDATECREATED + 978307200, 'unixepoch')) = '{d}'" 
+                for d in entry['dates']
+            )
+            count_row = conn.execute(f"""
+                SELECT COUNT(*) FROM ZASSET 
+                WHERE ({date_clauses})
+                  AND ZTRASHEDSTATE = 0
+                  AND (ZLATITUDE = 0 OR ZLATITUDE = -180 OR ZLATITUDE IS NULL)
+            """).fetchone()
+            photo_count = count_row[0] if count_row else 0
+            
+            if photo_count == 0:
+                continue
+            
+            # Also get the date range in CoreData timestamp format
+            date_row = conn.execute(f"""
+                SELECT MIN(ZDATECREATED), MAX(ZDATECREATED) FROM ZASSET 
+                WHERE ({date_clauses})
+                  AND ZTRASHEDSTATE = 0
+                  AND (ZLATITUDE = 0 OR ZLATITUDE = -180 OR ZLATITUDE IS NULL)
+            """).fetchone()
+            
+            key = f"{loc_name}|{cc}"
+            if key not in groups:
+                groups[key] = {
+                    'count': 0, 'lats': [], 'lons': [], 'dates': [],
+                    'country_code': cc, 'state': entry.get('continent', ''), 'subLocality': None,
+                }
+            g = groups[key]
+            g['count'] += photo_count
+            g['lats'].append(entry['lat'])
+            g['lons'].append(entry['lon'])
+            if date_row and date_row[0]:
+                g['dates'].append(date_row[0])
+            if date_row and date_row[1]:
+                g['dates'].append(date_row[1])
+            g['country_code'] = cc
+            
+            print(f"  + {entry['flag']} {loc_name}: {photo_count} photos ({entry['note']})", file=sys.stderr)
     
     # ─── PHASE 3: Build output ───
     CORE_EPOCH = 978307200

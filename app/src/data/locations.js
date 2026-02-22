@@ -1,9 +1,9 @@
 // Travel Radar — Apple Photos GPS Intelligence
-// 259 locations, 117,188 photos (+50,464 inferred)
-// Generated: 2026-02-22T22:54:31
+// 261 locations, 117,328 photos (+50,464 inferred)
+// Generated: 2026-02-22T23:09:43
 
 export const travelData = {
-  totalPhotosWithGPS: 117188,
+  totalPhotosWithGPS: 117328,
   inferredFromProximity: 50464,
   cities: [
   {
@@ -25,8 +25,8 @@ export const travelData = {
     "continent": "Europe",
     "lat": 48.8622,
     "lon": 2.3226,
-    "count": 3176,
-    "firstDate": "2025-02-14",
+    "count": 3225,
+    "firstDate": "2009-08-19",
     "lastDate": "2026-01-12",
     "flag": "🇫🇷",
     "region": "Île-de-France",
@@ -51,8 +51,8 @@ export const travelData = {
     "continent": "Europe",
     "lat": 41.8981,
     "lon": 12.4841,
-    "count": 1506,
-    "firstDate": "2025-02-24",
+    "count": 1527,
+    "firstDate": "2009-07-27",
     "lastDate": "2025-12-26",
     "flag": "🇮🇹",
     "region": "Lazio",
@@ -72,6 +72,19 @@ export const travelData = {
     "isHome": false
   },
   {
+    "name": "Florence",
+    "country": "Italy",
+    "continent": "Europe",
+    "lat": 43.7721,
+    "lon": 11.2566,
+    "count": 781,
+    "firstDate": "2009-07-12",
+    "lastDate": "2025-12-30",
+    "flag": "🇮🇹",
+    "region": "Tuscany",
+    "isHome": false
+  },
+  {
     "name": "Tokyo",
     "country": "Japan",
     "continent": "Asia",
@@ -82,19 +95,6 @@ export const travelData = {
     "lastDate": "2025-04-28",
     "flag": "🇯🇵",
     "region": "Tokyo",
-    "isHome": false
-  },
-  {
-    "name": "Florence",
-    "country": "Italy",
-    "continent": "Europe",
-    "lat": 43.7721,
-    "lon": 11.2566,
-    "count": 765,
-    "firstDate": "2025-12-26",
-    "lastDate": "2025-12-30",
-    "flag": "🇮🇹",
-    "region": "Tuscany",
     "isHome": false
   },
   {
@@ -150,29 +150,29 @@ export const travelData = {
     "isHome": false
   },
   {
-    "name": "Venice",
-    "country": "Italy",
-    "continent": "Europe",
-    "lat": 45.4397,
-    "lon": 12.3256,
-    "count": 513,
-    "firstDate": "2025-12-30",
-    "lastDate": "2026-01-02",
-    "flag": "🇮🇹",
-    "region": "Veneto",
-    "isHome": false
-  },
-  {
     "name": "Melbourne",
     "country": "Australia",
     "continent": "Oceania",
     "lat": -37.8145,
     "lon": 144.9652,
-    "count": 507,
-    "firstDate": "2022-07-10",
+    "count": 522,
+    "firstDate": "2009-03-26",
     "lastDate": "2024-04-30",
     "flag": "🇦🇺",
     "region": "VIC",
+    "isHome": false
+  },
+  {
+    "name": "Venice",
+    "country": "Italy",
+    "continent": "Europe",
+    "lat": 45.4397,
+    "lon": 12.3256,
+    "count": 520,
+    "firstDate": "2009-07-10",
+    "lastDate": "2026-01-02",
+    "flag": "🇮🇹",
+    "region": "Veneto",
     "isHome": false
   },
   {
@@ -475,6 +475,19 @@ export const travelData = {
     "isHome": false
   },
   {
+    "name": "Pisa",
+    "country": "Italy",
+    "continent": "Europe",
+    "lat": 43.7228,
+    "lon": 10.3956,
+    "count": 167,
+    "firstDate": "2009-07-30",
+    "lastDate": "2025-12-29",
+    "flag": "🇮🇹",
+    "region": "Tuscany",
+    "isHome": false
+  },
+  {
     "name": "Tarifa",
     "country": "Spain",
     "continent": "Europe",
@@ -498,19 +511,6 @@ export const travelData = {
     "lastDate": "2024-05-26",
     "flag": "🇲🇦",
     "region": "Tanger-Tetouan-Al Hoceima",
-    "isHome": false
-  },
-  {
-    "name": "Pisa",
-    "country": "Italy",
-    "continent": "Europe",
-    "lat": 43.7228,
-    "lon": 10.3956,
-    "count": 162,
-    "firstDate": "2025-12-29",
-    "lastDate": "2025-12-29",
-    "flag": "🇮🇹",
-    "region": "Tuscany",
     "isHome": false
   },
   {
@@ -2828,6 +2828,19 @@ export const travelData = {
     "isHome": false
   },
   {
+    "name": "Petra",
+    "country": "Jordan",
+    "continent": "Asia",
+    "lat": 30.3285,
+    "lon": 35.4444,
+    "count": 15,
+    "firstDate": "2009-09-05",
+    "lastDate": "2009-09-07",
+    "flag": "🇯🇴",
+    "region": "Asia",
+    "isHome": false
+  },
+  {
     "name": "Dubbo",
     "country": "Australia",
     "continent": "Oceania",
@@ -3202,6 +3215,19 @@ export const travelData = {
     "lastDate": "2025-11-15",
     "flag": "🇦🇺",
     "region": "NSW",
+    "isHome": false
+  },
+  {
+    "name": "Agra",
+    "country": "India",
+    "continent": "Asia",
+    "lat": 27.1751,
+    "lon": 78.0421,
+    "count": 12,
+    "firstDate": "2009-10-07",
+    "lastDate": "2009-10-09",
+    "flag": "🇮🇳",
+    "region": "Asia",
     "isHome": false
   },
   {
