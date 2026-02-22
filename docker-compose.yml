@@ -1,0 +1,9 @@
+services:
+  travel-radar:
+    build: .
+    container_name: travel-radar
+    restart: unless-stopped
+    ports:
+      - "3210:3210"
+    labels:
+      - "com.openclaw.project=travel-radar"
