@@ -4,6 +4,6 @@ services:
     container_name: travel-radar
     restart: unless-stopped
     ports:
-      - "3211:3210"
+      - "3212:3210"
     labels:
       - "com.openclaw.project=travel-radar"
