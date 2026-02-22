@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import Globe from 'globe.gl';
 import { travelData, getStats, getYearRange } from './data/locations';
+import { subLocations } from './data/sublocs';
 import './index.css';
 
 // ─── CONSTANTS ────────────────────────────
@@ -8,6 +9,16 @@ const PINK = '#ff3399';
 const CYAN = '#44ccbb';
 const PURPLE = '#7744aa';
 const BG = '#0a0d14';
+
+const COUNTRY_CODES = {
+  'Australia': 'AU', 'France': 'FR', 'Italy': 'IT', 'UK': 'GB', 'Japan': 'JP',
+  'Sweden': 'SE', 'Spain': 'ES', 'Greece': 'GR', 'Netherlands': 'NL', 'Finland': 'FI',
+  'Hong Kong': 'HK', 'UAE': 'AE', 'Thailand': 'TH', 'Singapore': 'SG', 'USA': 'US',
+  'Morocco': 'MA', 'Egypt': 'EG', 'Qatar': 'QA', 'Iran': 'IR', 'Gibraltar': 'GI',
+  'Switzerland': 'CH', 'Germany': 'DE', 'New Zealand': 'NZ', 'India': 'IN',
+  'Lebanon': 'LB', 'Jordan': 'JO',
+};
+function getCountryCode(country) { return COUNTRY_CODES[country] || ''; }
 
 function App() {
   const globeRef = useRef(null);
@@ -22,6 +33,7 @@ function App() {
   const playRef = useRef(null);
   const [time, setTime] = useState(new Date());
   const [showPaths, setShowPaths] = useState(true);
+  const [drillDown, setDrillDown] = useState(null); // { city, sublocs[] }
 
   const { min: minYear, max: maxYear } = useMemo(() => getYearRange(travelData.cities), []);
 
@@ -196,15 +208,50 @@ function App() {
       .ringsData(filteredCities.filter(c => c.count > 200));
   }, [filteredCities, flightPaths]);
 
-  // Fly to selected city
+  // Fly to selected city + load drill-down
   useEffect(() => {
     if (selectedCity && globeInstance.current) {
-      globeInstance.current.pointOfView(
-        { lat: selectedCity.lat, lng: selectedCity.lon, altitude: 1.5 },
-        1000
-      );
+      const key = `${selectedCity.name}|${selectedCity.country_code || ''}`;
+      // Try multiple key formats
+      const sublocs = subLocations[key] 
+        || subLocations[`${selectedCity.name}|${getCountryCode(selectedCity.country)}`]
+        || null;
+      
+      if (sublocs && sublocs.length > 0) {
+        setDrillDown({ city: selectedCity, sublocs });
+        // Zoom in closer for drill-down
+        globeInstance.current.pointOfView(
+          { lat: selectedCity.lat, lng: selectedCity.lon, altitude: 0.15 },
+          1500
+        );
+        // Show sub-location points
+        globeInstance.current
+          .pointsData([...filteredCities, ...sublocs.map(s => ({
+            ...s,
+            _isSubloc: true,
+          }))])
+          .pointColor(d => d._isSubloc ? '#ffaa00' : d.isHome ? CYAN : PINK)
+          .pointRadius(d => d._isSubloc 
+            ? Math.max(0.05, Math.min(Math.log10(d.count) * 0.08, 0.3))
+            : Math.max(0.15, Math.min(Math.log10(d.count) * 0.25, 1.2)));
+      } else {
+        setDrillDown(null);
+        globeInstance.current.pointOfView(
+          { lat: selectedCity.lat, lng: selectedCity.lon, altitude: 1.5 },
+          1000
+        );
+      }
+    } else {
+      setDrillDown(null);
+      // Restore normal points
+      if (globeInstance.current) {
+        globeInstance.current
+          .pointsData(filteredCities)
+          .pointColor(d => d.isHome ? CYAN : PINK)
+          .pointRadius(d => Math.max(0.15, Math.min(Math.log10(d.count) * 0.25, 1.2)));
+      }
     }
-  }, [selectedCity]);
+  }, [selectedCity, filteredCities]);
 
   const formatDate = (d) => {
     const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
@@ -356,43 +403,92 @@ function App() {
         </div>
       </div>
 
-      {/* ─── SELECTED CITY DETAIL ─── */}
+      {/* ─── SELECTED CITY DETAIL + DRILL DOWN ─── */}
       {selectedCity && (
-        <div className="panel absolute bottom-36 left-4 z-10 w-72 p-4">
-          <div className="flex items-center justify-between mb-3">
-            <div>
-              <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-                {selectedCity.flag} {selectedCity.name}
-              </h3>
-              <p className="text-[10px] text-gray-500 uppercase tracking-wider">
-                {selectedCity.country} • {selectedCity.continent}
-              </p>
+        <div className="panel absolute top-16 left-72 z-20 w-80 max-h-[calc(100vh-120px)] flex flex-col ml-2">
+          {/* Header */}
+          <div className="p-4 border-b border-[rgba(255,51,153,0.2)]">
+            <div className="flex items-center justify-between mb-2">
+              <div>
+                <h3 className="text-sm font-bold text-white uppercase tracking-wider">
+                  {selectedCity.flag} {selectedCity.name}
+                </h3>
+                <p className="text-[10px] text-gray-500 uppercase tracking-wider">
+                  {selectedCity.country} • {selectedCity.continent}
+                </p>
+              </div>
+              <button
+                onClick={() => setSelectedCity(null)}
+                className="text-gray-600 hover:text-white text-xs"
+              >
+                ✕
+              </button>
             </div>
-            <button
-              onClick={() => setSelectedCity(null)}
-              className="text-gray-600 hover:text-white text-xs"
-            >
-              ✕
-            </button>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs uppercase tracking-wider">
+              <div className="flex justify-between">
+                <span className="text-gray-500">Photos</span>
+                <span className="stat-value">{selectedCity.count.toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-500">Coords</span>
+                <span className="text-[#44ccbb]">{selectedCity.lat.toFixed(2)}° {selectedCity.lon.toFixed(2)}°</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-500">First</span>
+                <span className="text-white">{selectedCity.firstDate}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-500">Last</span>
+                <span className="text-white">{selectedCity.lastDate}</span>
+              </div>
+            </div>
           </div>
-          <div className="space-y-1.5 text-xs uppercase tracking-wider">
-            <div className="flex justify-between">
-              <span className="text-gray-500">Photos</span>
-              <span className="stat-value">{selectedCity.count.toLocaleString()}</span>
+
+          {/* Drill-down sub-locations */}
+          {drillDown && drillDown.sublocs.length > 0 && (
+            <div className="flex-1 overflow-y-auto">
+              <div className="px-4 py-2 border-b border-[rgba(255,51,153,0.15)]">
+                <p className="text-[10px] text-[#ffaa00] uppercase tracking-wider font-bold">
+                  📍 {drillDown.sublocs.length} Locations Visited
+                </p>
+              </div>
+              <div className="divide-y divide-[rgba(255,51,153,0.08)]">
+                {drillDown.sublocs.map((sub, i) => (
+                  <div
+                    key={i}
+                    className="px-4 py-2 hover:bg-[rgba(255,170,0,0.08)] cursor-pointer transition-colors"
+                    onClick={() => {
+                      if (globeInstance.current) {
+                        globeInstance.current.pointOfView(
+                          { lat: sub.lat, lng: sub.lon, altitude: 0.05 },
+                          800
+                        );
+                      }
+                    }}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] text-white truncate max-w-[200px]" title={sub.name}>
+                        {sub.type === 'neighborhood' ? '🏘️' : '📍'} {sub.name}
+                      </span>
+                      <span className="text-[10px] text-[#ffaa00] ml-2 shrink-0 font-bold">
+                        {sub.count}
+                      </span>
+                    </div>
+                    <p className="text-[9px] text-gray-600 tracking-wider">
+                      {sub.firstDate}{sub.firstDate !== sub.lastDate ? ` → ${sub.lastDate}` : ''}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="flex justify-between">
-              <span className="text-gray-500">First Visit</span>
-              <span className="text-white">{selectedCity.firstDate}</span>
+          )}
+
+          {/* No drill-down available */}
+          {(!drillDown || drillDown.sublocs.length === 0) && selectedCity && (
+            <div className="p-4 text-[10px] text-gray-600 uppercase tracking-wider">
+              No detailed sub-location data available
             </div>
-            <div className="flex justify-between">
-              <span className="text-gray-500">Last Visit</span>
-              <span className="text-white">{selectedCity.lastDate}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-500">Coordinates</span>
-              <span className="text-[#44ccbb]">{selectedCity.lat.toFixed(2)}° {selectedCity.lon.toFixed(2)}°</span>
-            </div>
-          </div>
+          )}
         </div>
       )}
 
