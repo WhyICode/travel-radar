@@ -1,6 +1,6 @@
 // Travel Radar — Apple Photos GPS Intelligence
 // 261 locations, 117,328 photos (+50,464 inferred)
-// Generated: 2026-02-22T23:09:43
+// Generated: 2026-02-22T23:16:03
 
 export const travelData = {
   totalPhotosWithGPS: 117328,

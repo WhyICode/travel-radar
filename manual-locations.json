@@ -13,15 +13,15 @@
       "note": "Luna Park St Kilda — AI identified"
     },
     {
-      "dates": ["2009-06-06"],
-      "location": "Lebanon",
+      "dates": ["2009-06-06", "2009-06-13", "2009-09-24", "2009-09-25"],
+      "location": "Beirut",
       "country": "Lebanon",
       "country_code": "LB",
       "continent": "Asia",
       "lat": 33.8938,
       "lon": 35.5018,
       "flag": "🇱🇧",
-      "note": "Boat trip — AI identified as Lebanon"
+      "note": "Lebanon trip Sep 2009 — user confirmed + AI identified"
     },
     {
       "dates": ["2009-07-10"],
